@@ -1,0 +1,22 @@
+install docker
+------------------
+Create the private registry
+Command: docker run -d -p 5000:5000 --name registry registry
+------------------------------------------
+Creation of image or pull any image 
+Command:#docker pull centos
+----------------------------------------
+tagging the image to private registry/localhost
+Command:#docker tag centos localhost:5000/centos
+-----------------------------------------
+push the image to the private registry.
+Command:# docker push localhost:5000/centos
+-----------------------------------------
+Remove the image.
+Command:docker rmi -f centos <image id>
+Example:docker rmi -f centos 5d0da3dc9764
+-----------------------------------------
+pull the image from private registry/locally.
+Command:docker pull localhost:5000/centos
+--------------------------------------------
+done!!!!!!!!!!!!!!!!
