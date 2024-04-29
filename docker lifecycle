@@ -1,0 +1,7 @@
+docker top <CID>
+docker stop CID
+docker start CID
+docker pause CID
+docker history IID
+docker stats CID
+docker rm CID
