@@ -14,7 +14,7 @@ EXAMPLE:#docker build –t sajid:001 .
 create a new public repository on docker hub
 ------------------------------------------
 COMMAND:#docker tag image_name:tag docker_repository_name:tag
-EXAMPLE:#docker tag sajid:01 sajid1095/sajid:001
+EXAMPLE:#docker tag sajid:001 sajid1095/sajid:48
 ------------------------------------------
 1-login docker hub in your linux  terminal with your credentials 
 2- push docker image to docker hub 
