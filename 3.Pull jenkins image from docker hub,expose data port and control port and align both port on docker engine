@@ -1,7 +1,7 @@
 install docker 
 ---------------------
 Pull Jenkins image from docker hub.
-Command: docker pull Jenkins/Jenkins
+Command: docker pull jenkins/jenkins
 ----------------------------------
 Inspect the ports exposed by container/image.
 Command:#docker inspect image_id
