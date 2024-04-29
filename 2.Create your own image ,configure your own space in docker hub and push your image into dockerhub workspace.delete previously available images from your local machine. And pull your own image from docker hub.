@@ -1,0 +1,29 @@
+install docker 
+------------------------
+vi Dockerfile
+#this is sample image
+FROM ubuntu
+MAINTAINER raj385018@gmail.com
+RUN apt update -y
+RUN apt install nginx -y
+CMD ["echo","image is created by sajid"]
+----------------------------------------
+COMMAND : #docker build –t image_name:tag /path of docker file
+EXAMPLE:#docker build –t sajid:001 .
+----------------------------------------
+create a new public repository on docker hub
+------------------------------------------
+COMMAND:#docker tag image_name:tag docker_repository_name:tag
+EXAMPLE:#docker tag sajid:01 sajid1095/sajid:001
+------------------------------------------
+1-login docker hub in your linux  terminal with your credentials 
+2- push docker image to docker hub 
+COMMAND: #docker push image_name_with_dockerhub_repository:tag
+EXAMPLE:#docker push sajid1095/sajid:001
+-------------------------------------------
+COMMAND: #docker rmi –f image_id
+EXAMPLE:#docker rmi –f 49a9b1cbe9fd
+----------------------------------------
+COMMAND:#docker run sajid1095/sajid:48
+-------------------------------------
+done !!!!!!!!!!!!!!!!!
