@@ -1,0 +1,96 @@
+AWS ECS
+--------------------
+Create a Cluster.
+*CLUSTER NAME : Sajid_Practical5
+*INFRASTRUCTURE : aws farget (serverless ) & Amazon EC2 Instance.
+*Create ASG 
+*PROVISIONING MODEL : Select On-Demand
+*OPERATING SYSTEM/ARCHITECTURE : Amazon Linux 2
+*EC2 INSTANCE TYPE : t2.micro (free tier eligible)
+*DESIRED CAPACITY : Minimum – 01     Maximum – 02
+*SSH KEYPAIR : sajid95
+*NETWORK  SETTING FOR AMAZON INSTANCE:
+Use default VPC , select all subnets , 
+Security group: Docker
+*Click On Create
+-----------------------------------------------------------------
+Step2:Create a task definition for EC2 instance
+*TASK DEFINITION FAMILY NAME : Practical-5
+*LAUNCH TYPE : i) Amazon EC2 instances 
+*OS ARCHITECTURE AND NETWORK MODE : default(no changes)
+*NETWORK MODE : awsvpc
+*TASK SIZE :  i)  CPU – 0.25 vCPU      	 ii) Memory – .5 GB
+*TASK ROLE :  ecsTaskExecutionRole
+*CONTAINER DETAILS :
+Name : httpd
+Image URI : httpd:2.4
+Essential Container : Yes
+*PORT MAPPINGS : 
+Port Name = http-80-tcp 
+Protocol : 80
+Port Name : http_port
+App Protocol : HTTP
+*Click On Create
+---------------------------------------------------------------------------
+Step3: Deploy Service for amazon EC2 instance launch type
+*Existing Cluster As Default
+*COMPUTE OPTIONS : Select launch type
+*LAUNCH TYPE : EC2
+*APPLICATION TYPE : select service
+*SERVICE NAME : Practical-05
+*SERVICE TYPE : replica
+*DESIRED TASK : 1
+*CLICK ON CREATE
+--------------------------------------------------------------------
+Step4: Go to service and then select infrastructure
+--------------------------------------------------------------------
+Step5:Then select the ssh id 
+--------------------------------------------------------------
+Step6: Connect running instance created by EC2 launch type using ssh terminal/CMD
+-----------------------------------------------------------------------------
+                              LAUNCH TYPE FARGATE
+Step1: Create a cluster.
+*CLUSTER NAME : sajid-fargate
+*INFRASTRUCTURE : aws farget (serverless ) & Amazon EC2 Instance.
+*Create ASG 
+*PROVISIONING MODEL : Select On-Demand
+*OPERATING SYSTEM/ARCHITECTURE : Amazon Linux 2
+*EC2 INSTANCE TYPE : t2.micro (free tier eligible)
+*DESIRED CAPACITY : Minimum – 01     Maximum – 02
+*SSH KEYPAIR : devops key
+*NETWORK  SETTING FOR AMAZON INSTANCE:
+*Use default VPC , select all subnets , 
+*Security group: Docker
+*Click On Create
+---------------------------------------------------------------------------------
+Step2: Create a task definition for fargate
+*TASK DEFINITION FAMILY NAME : sajid-fargate
+*LAUNCH TYPE : i) farget 
+*OS ARCHITECTURE AND NETWORK MODE : default(no changes)
+*TASK SIZE :  i)  CPU – 0.25 vCPU      	 ii) Memory – .5 GB
+*TASK ROLE :  ecsTaskExecutionRole
+*CONTAINER DETAILS :
+Name : httpd
+Image URI : httpd:2.4
+Essential Container : Yes
+*PORT MAPPINGS : 
+Port Name = http-80-tcp 
+Protocol : 80
+Port Name : http_port
+App Protocol : httpd
+*Click On Create
+-------------------------------------------------------------------------------------
+Step3:Deploy service for fargate launch type.
+
+*Existing Cluster As Default
+*COMPUTE OPTIONS : Select launch type
+*LAUNCH TYPE : Farget
+*APPLICATION TYPE : select service
+*SERVICE NAME : fargate
+*SERVICE TYPE : replica
+*DESIRED TASK : 1
+*CLICK ON CREATE
+-------------------------------------------------------------------------------------
+Step4: Go to service and select task copy public IP of that running task and paste it on browser.
+---------------------------------------------------------------------------------------
+done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
