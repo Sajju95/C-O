@@ -1,0 +1,20 @@
+install docker 
+---------------------
+Pull Jenkins image from docker hub.
+Command: docker pull Jenkins/Jenkins
+----------------------------------
+Inspect the ports exposed by container/image.
+Command:#docker inspect image_id
+Example:#docker inspect db75aa81ca2b
+-----------------------------------
+Run the docker Jenkins image along with data port and control port.
+Command:docker run -p 4899:8080 -p 50000:50000 jenkins/Jenkins
+** remember to copy the password of jenkins**
+-------------------------------------
+Expose Jenkins image with data port.
+copy public IP of EC2 and paste along with data port paste on browser
+*data port number is :4899
+----------------------------------------
+Expose Jenkins image with control port.
+copy public IP of EC2 and paste along with control port paste on browser
+*control port number is :50000 
