@@ -1,0 +1,22 @@
+install docker 
+---------------------------------------
+Step3: Initialize docker swarm & get the join token for workers.
+Cmd: #docker swarm init
+-------------------------------------------
+Step4:Copy the join token of the worker nodes from manager node and paste individually to worker nodes to join. 
+Worker node1
+worker node2
+worker node3
+------------------------------------------------
+Step5: Check whether all the worker nodes are connected to swarm or not.
+Cmd:#docker node ls
+**in manager node
+-------------------------------------------------
+Step6: Perform docker swarm operations
+Create service and assign task to worker nodes
+Cmd : #docker service create --replicas 5 alpine ping www.google.com
+----------------------------------------------------
+Step7: check docker service is created or not
+COMMAND : ~#docker service ls
+-----------------------------------------------------
+done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
