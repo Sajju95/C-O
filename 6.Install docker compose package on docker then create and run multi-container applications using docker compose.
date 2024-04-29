@@ -1,0 +1,73 @@
+install docker 
+-----------------------------
+Step3: Install docker compose.
+COMMAND: #curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+MAKE IT EXECUTABLE : chmod +x /usr/local/bin/docker-compose
+--------------------------------------------------------------------------------
+Step4:Test the installation.
+COMMAND:#docker compose version
+--------------------------------------------------------------------
+Step5:Create directory for project.
+COMMAND: #mkdir compose
+COMMAND: #cd compose
+-------------------------------------------------------------------
+Step6: Create a file called app.py in your project directory and write the following code in app.py file.
+COMMAND: #nano app.py
+import time
+import redis
+from flask import Flask
+app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+@app.route('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! I have been seen {} times.\n'.format(count)
+--------------------------------------------------------------------------
+Step7: Create another file called requirements.txt in your project directory and write the following code in requirements.txt file.
+COMMAND: #nano requirements.txt
+flask
+redis
+--------------------------------------------------------------------------
+Step8: Create a dockerfile named file in your project directory and write the following code in that file.
+COMMAND: #nano Dockerfile
+# syntax=docker/dockerfile:1
+FROM python:3.10-alpine
+WORKDIR /code
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+EXPOSE 5000
+COPY . .
+CMD ["flask", "run"]
+-----------------------------------------------------------------------
+Step9:  Create a compose.yml file and define the services in project directory and write the following script in that yaml file.
+COMMAND: #nano compose.yaml
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+  redis:
+    image: "redis:alpine"
+------------------------------------------------------------------------------
+Step10: Build and run your project with compose.
+From your project directory, start up your project by running docker compose up.
+COMMAND: #docker compose up
+-------------------------------------------------------------------------------
+Step11: Copy your machine’s public IP and paste to browser with :8000 port.
+For eg: http://43.205.140.213:8000
+------------------------------------------------------------------------------
+done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
