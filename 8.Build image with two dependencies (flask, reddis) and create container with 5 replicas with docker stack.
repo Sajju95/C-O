@@ -1,0 +1,119 @@
+install docker 
+------------------------------
+Step1: launch 1 swarm manager & 3 swarm worker instances.
+------------------------------------------
+Step2: Connect instance and install docker on EC2 machine.
+----------------------------------------------
+Step3: Initialize docker swarm.
+Cmd:# docker swarm init 
+**on manager node 
+----------------------------------------------
+Step4: Generate join-token for worker nodes.
+Cmd:# docker swarm join-token worker
+**on manager node & connect the worker nodes individually
+------------------------------------------------------
+Step6:Check whether all worker nodes connected to swarm or not
+Cmd:# docker node ls
+**on manager node
+----------------------------------------------------------
+Step7: Create directory for project
+Cmd:# mkdir project
+Cmd:# cd project 
+----------------------------------------------------------
+Step8: Create a file app.py in your project directory and paste the following code in that file.
+Cmd:# vi app.py
+from flask import Flask
+from redis import Redis, RedisError
+import os
+import socket
+# Connect to Redis
+redis = Redis(host="redis", db=0, socket_connect_timeout=2, socket_timeout=2)
+app = Flask(__name__)
+@app.route("/")
+def hello():
+    try:
+        visits = redis.incr("counter")
+    except RedisError:
+        visits = "<i>cannot connect to Redis, counter disabled</i>"
+    html = "<h3>Hello {name}!</h3>" \
+           "<b>Hostname:</b> {hostname}<br/>" \
+           "<b>Visits:</b> {visits}"
+    return html.format(name=os.getenv("NAME", "world"), hostname=socket.gethostname(), visits=visits)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80)
+------------------------------------------------------------------
+Step9:Create another file “requirement.txt” and paste the following content.
+Cmd:# vi requirement.txt
+Flask
+Redis
+------------------------------------------------------------------
+Step10: Create a “Dockerfile” in your project and paste the following code in that file
+Cmd:# vi Dockerfile
+# Use an official Python runtime as a parent image
+FROM python:3.12-slim
+# Set the working directory to /app
+WORKDIR /app
+# Copy the current directory contents into the container at /app
+COPY . /app
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Make port 80 available to the world outside this container
+EXPOSE 80
+# Define environment variable
+ENV NAME World
+# Run app.py when the container launches
+CMD ["python", "app.py"]
+----------------------------------------------------------------------
+Step11: Build docker image using docker Dockerfile.
+Cmd: docker build –t image_name:tag /path of docker file
+    #docker build -t stack:01 .
+-------------------------------------------------------------------
+Step12: Create a new public repository in docker hub.
+----------------------------------------------------------------
+Step13:Add tag to image.
+Cmd: docker tag image_name:tag docker_repository_name:tag
+     #sudo docker tag stack:01 sajid1095/swarm:lab
+-----------------------------------------------------------------
+Step14: Push the image to docker hub.
+#docker login => login docker hub in your linux  terminal with your credentials
+Push docker image in docker hub:
+#docker push image_name/id:tag 
+#docker push sajid1095/swarm:lab
+--------------------------------------------------------------------
+Step15:Define the services in a compose file  in your project directory and paste the following content in that compose.yml file.
+Cmd:#vi docker-compose.yml
+version: "3"
+services:
+  # Service Name Defined as web
+  web:
+    # Pull the Image from Repository.
+    # replace username/repo:tag with your name and image details
+    #image: username/repo:tag 
+    image: omii147/swarm:lab
+    # Command used to deploy the Service
+    deploy:
+      # Run 5 instances of that image as a service called web
+      replicas: 5
+      resources:
+        # Limiting each one to use, at most, 10% of a single core of CPU time and 50MB of RAM.
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      # Immediately restart containers if one fails.     
+      restart_policy:
+        condition: on-failure
+    # Map port 4000 on the host to web’s port 80.    
+    ports:
+      - "4000:80"
+    # Define default network  
+    networks:
+      - webnet
+networks:
+  webnet:
+---------------------------------------------------------------------------------
+Step16: Test the app with compose.
+Cmd:# docker stack deploy -c docker-compose.yml web_app
+----------------------------------------------------------------------------
+Step17: Check the output of stack using IP of EC2 machine and paste it in the browser with port :4000.
+----------------------------------------------------------------------------
+done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
